@@ -6,7 +6,7 @@ export default (expenses, {text, sortBy, startDate, endDate}) => {
 
     return startDateCheck && endDateCheck && textCheck
   }).sort( (a, b) => {
-    if (sortBy === 'date') {
+      if (sortBy === 'date') {
       return a.createdAt > b.createdAt ? -1 : 1
     } else if (sortBy === 'amount') {
       return a.amount > b.amount ? 1 : -1
