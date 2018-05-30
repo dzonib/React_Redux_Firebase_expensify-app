@@ -8,10 +8,10 @@ import {Provider} from 'react-redux'
 
 const store = storeConfig();
 
-store.subscribe(() => {
-  const state = store.getState();
-  console.log(visibleExpenses(state.expenses, state.filters))
-})
+// store.subscribe(() => {
+//   const state = store.getState();
+//   console.log(visibleExpenses(state.expenses, state.filters))
+// })
 
 store.dispatch(addExpense({description: 'Water bill', amount: 20, createdAt: 5424002}))
 store.dispatch(addExpense({description: 'O2 bill', amount: 17, createdAt: 544548}))
