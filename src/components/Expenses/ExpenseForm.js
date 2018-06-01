@@ -1,10 +1,8 @@
 import React, {Component} from 'react';
 import moment from 'moment'
 import 'react-dates/initialize';
-import { SingleDatePicker} from 'react-dates';
+import {SingleDatePicker} from 'react-dates';
 import 'react-dates/lib/css/_datepicker.css';
-
-
 
 const now = moment();
 console.log(now.format('MMM Do, YYYY'))
@@ -13,8 +11,10 @@ export default class ExpenseForm extends Component {
   state = {
     description: '',
     amount: 0,
-    createdAt: 0,
-    note: ''
+    createdAt: moment(),
+    note: '',
+    focused: false,
+    error: ''
   }
 
   descriptionHandler = (e) => {
@@ -24,7 +24,7 @@ export default class ExpenseForm extends Component {
 
   amountHandler = (e) => {
     const amount = e.target.value;
-    if (amount.match(/^\d{0,}(\.\d{0,2})?$/)) {
+    if (!amount || amount.match(/^\d{1,}(\.\d{0,2})?$/)) {
       this.setState(() => ({amount}))
     }
   }
@@ -33,10 +33,27 @@ export default class ExpenseForm extends Component {
     this.setState({note: e.target.value})
   }
 
+  dateChangeHandler = (createdAt) => {
+
+    createdAt && this.setState(() => ({createdAt}))
+  }
+
+  onFocusChange = ({focused}) => {
+    this.setState(() => ({focused}))
+  }
+
+  onSubmit = () => {
+    if (!this.state.description && !this.state.amount) {
+      this.setState(() => ({error: 'Please enter expense description and ammount to add expense.'}))
+    } else {
+      this.setState(() => ({error: ''}))
+    }
+  }
+
   render() {
     return (
       <div>
-        <form>
+        <form onSubmit={this.onSubmit}>
           <input
             type="text"
             autoFocus
@@ -48,6 +65,14 @@ export default class ExpenseForm extends Component {
             placeholder="Amount"
             value={this.state.amount}
             onChange={this.amountHandler}/>
+          <SingleDatePicker
+            date={this.state.createdAt}
+            onDateChange={this.dateChangeHandler}
+            focused={this.state.focused}
+            onFocusChange={this.onFocusChange}
+            numberOfMonths={1}
+            isOutsideRange={() => false}
+            />
           <textarea
             value={this.state.note}
             onChange={this.noteHandler}
