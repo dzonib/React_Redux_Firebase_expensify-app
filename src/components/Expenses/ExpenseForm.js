@@ -4,18 +4,21 @@ import 'react-dates/initialize';
 import {SingleDatePicker} from 'react-dates';
 import 'react-dates/lib/css/_datepicker.css';
 
-const now = moment();
-console.log(now.format('MMM Do, YYYY'))
 
 export default class ExpenseForm extends Component {
-  state = {
-    description: '',
-    amount: 0,
-    createdAt: moment(),
-    note: '',
-    focused: false,
-    error: ''
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      description: '',
+      amount: '',
+      createdAt: moment(),
+      note: '',
+      focused: false,
+      error: ''
+    }
   }
+
 
   descriptionHandler = (e) => {
     const description = e.target.value
@@ -42,11 +45,18 @@ export default class ExpenseForm extends Component {
     this.setState(() => ({focused}))
   }
 
-  onSubmit = () => {
+  onSubmit = (e) => {
+    e.preventDefault();
     if (!this.state.description && !this.state.amount) {
       this.setState(() => ({error: 'Please enter expense description and ammount to add expense.'}))
     } else {
       this.setState(() => ({error: ''}))
+      this.props.onSubmit({
+        description: this.state.description,
+        amount: Number(this.state.amount),
+        note: this.state.note,
+        createdAt: this.state.createdAt.valueOf()
+      })
     }
   }
 
