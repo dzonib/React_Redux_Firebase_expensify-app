@@ -10,10 +10,10 @@ export default class ExpenseForm extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      description: '',
-      amount: '',
-      createdAt: moment(),
-      note: '',
+      description: props.expense ? props.expense.description : '',
+      amount: props.expense ? String(props.expense.amount) : '',
+      createdAt: props.expense ? moment(props.expense.createdAt) : moment(),
+      note: props.expense ? props.expense.note : '',
       focused: false,
       error: ''
     }
